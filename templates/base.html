@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <!--    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='boxicons-2.1.4/css/boxicons.min.css') }}">
+    {% block head %}
+
+    {% endblock %}
+</head>
+<body>
+<div class="nav">
+    <div class="nav-1">
+        <div class="header">
+            <div class="left">
+                <div class="banner-text">
+                    <img src="{{ url_for('static', filename='assets/luisa_no_background.png') }}" alt="" class="logo">
+                    <a href="{{ url_for('index') }}" class="branding-title">Luisa Money</a>
+                </div>
+                <div class="greet">
+                    {% if "uid" in session %}
+                        <p>Hello, <span id="global-account-username">{{ session['username'] }}</span></p>
+                    {% else %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="right">
+                <div class="mobile-session">
+                    {% if "uid" in session %}
+                        <a href="{{ url_for('logout') }}" id="profile-log-out"><i
+                                class='bx bx-log-out'></i> logout</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" id="profile-log-in"><i
+                                class='bx bx-log-in'></i> login</a>
+                    {% endif %}
+                </div>
+                <a href="{{ url_for("account") }}">
+                    <img src="data:image/png;base64,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"
+                         alt="">
+                </a>
+            </div>
+        </div>
+        <div class="nav-items-outer">
+
+            {% if "uid" in session %}
+                <div class="nav-items">
+                    <div class="{% if active_page == 'index' %} nav-item active {% else %} nav-item {% endif %}">
+                        <a href="{{ url_for('index') }}">
+                            <i class="bx bx-home"></i>
+                            <p>Home</p>
+                        </a>
+                    </div>
+                    <div class="{% if active_page == 'transactions' %} nav-item active {% else %} nav-item {% endif %}">
+                        <a href="{{ url_for('transactions') }}">
+                            <i class="bx bx-credit-card"></i>
+                            <p>Transactions</p>
+                        </a>
+                    </div>
+                    <div class="{% if active_page == 'history' %} nav-item active {% else %} nav-item {% endif %}">
+                        <a href="{{ url_for('history') }}">
+                            <i class="bx bx-history"></i>
+                            <p>History</p>
+                        </a>
+                    </div>
+                    <div class="{% if active_page == 'account' %} nav-item active {% else %} nav-item {% endif %}">
+                        <a href="{{ url_for('account') }}">
+                            <i class="bx bx-user"></i>
+                            <p>Account</p>
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+
+                <div class="nav-items">
+                    <div class="{% if active_page == 'index' %} nav-item active {% else %} nav-item {% endif %}">
+                        <a href="{{ url_for('index') }}">
+                            <i class="bx bx-home"></i>
+                            <p>Home</p>
+                        </a>
+                    </div>
+                    <div class="{% if active_page == 'transactions' %} nav-item active {% else %} nav-item {% endif %}">
+                        <a onclick="redirectLogin('Log in to view your transactions')">
+                            <i class="bx bx-credit-card"></i>
+                            <p>Transactions</p>
+                        </a>
+                    </div>
+                    <div class="{% if active_page == 'history' %} nav-item active {% else %} nav-item {% endif %}">
+                        <a onclick="redirectLogin('Log in to view your transaction history')">
+                            <i class="bx bx-history"></i>
+                            <p>History</p>
+                        </a>
+                    </div>
+                    <div class="{% if active_page == 'account' %} nav-item active {% else %} nav-item {% endif %}">
+                        <a onclick="redirectLogin('Log in to view your account settings')">
+                            <i class="bx bx-user"></i>
+                            <p>Account</p>
+                        </a>
+                    </div>
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <div class="nav-2">
+        <div class="session-info">
+            {% if "uid" in session %}
+                <a href="{{ url_for('logout') }}" id="profile-log-out"><i
+                        class='bx bx-log-out'></i> Log out</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" id="profile-log-in"><i
+                        class='bx bx-log-in'></i> Log in</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="main-content">
+    {% block maincontent %}
+
+    {% endblock %}
+</div>
+
+<div class="notifs">
+
+</div>
+
+<script>
+    const notifs = document.querySelector('.notifs');
+
+    function showNotif(type, message) {
+        const notif = document.createElement('div');
+        notif.classList.add('notif');
+        notif.classList.add(type);
+        notif.classList.add('opening');
+        notif.innerHTML = '<p>' + message + '</p> <i class=\'bx bx-x\'></i>';
+        notifs.appendChild(notif);
+
+        setTimeout(() => {
+            notif.classList.remove('opening');
+        }, 1);
+
+        const notifCloseBtn = notif.querySelector('.bx-x');
+        notifCloseBtn.addEventListener('click', () => {
+            notif.remove();
+        });
+
+        setTimeout(() => {
+            notif.classList.add('closing');
+        }, 3000);
+
+        setTimeout(() => {
+            notif.remove();
+        }, 3300);
+    }
+
+    function redirectLogin(message) {
+        showNotif('info', message);
+
+    }
+
+
+</script>
+
+{% block scripts %}
+
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luisa Money</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofP+MM9jGfcD5O5I3t1peGPh00bWQ1j" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+<body>
+    <div class="container mt-5">
+        <div class="message" id="messages"></div>
+        <h1 class="mb-4">Luisa Money</h1>
+        <form id="paymentForm">
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount:</label>
+                <input type="number" class="form-control" id="amount" placeholder="Enter amount" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="currency" class="form-label">Currency:</label>
+                <select class="form-select" id="currency" required>
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                    <!-- Add more currency options as needed -->
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="paymentMethod" class="form-label">Payment Method:</label>
+                <select class="form-select" id="paymentMethod" required>
+                    <option value="mpesa">M-PESA</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="creditCard">Credit Card</option>
+                    <!-- Add more payment methods as needed -->
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="derivAccount" class="form-label">DERIV Account:</label>
+                <input type="text" class="form-control" id="derivAccount" placeholder="Enter DERIV Account ID" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Make Payment</button>
+        </form>
+        <div id="message" class="mt-3"></div>
+        <div id="result" class="mt-3"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename= 'index.js') }}"></script>
+</body>
+</html>

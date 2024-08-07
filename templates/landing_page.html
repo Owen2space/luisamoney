@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Homepage | Luisa Money</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='boxicons-2.1.4/css/boxicons.min.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='landing-page.css') }}">
+
+</head>
+<body>
+<div class="sections">
+    <div class="section" id="homepage-nav">
+        <div class="homepage-nav-logo">
+            <img src="{{ url_for('static', filename='assets/luisa_no_background.png') }}">
+        </div>
+        <div class="homepage-nav-links">
+            <ul>
+                <li><a href="">Home</a></li>
+                <li><a href="#group-2">About Us</a></li>
+                <li><a href="#group-3">Services</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section" id="group-1">
+        <div class="group-1-text">
+            <p class="banner-text">Luisa Money</p>
+            <p class="banner-paragraph">
+                Your gateway to safe and secure money transfers.
+            </p>
+        </div>
+        <div class="group-1-image">
+            <img src="{{ url_for('static', filename='assets/luisa_no_background.png') }}">
+        </div>
+    </div>
+    <div class="section" id="group-2">
+        <div class="header">
+            <div class="group-2-heading">
+                Welcome to Luisa Money
+            </div>
+            <p>We provide easy, fast and secure money transfer.</p>
+            <div class="account-btn">
+                <a href="{{ url_for("login") }}">
+                    <button>Get started</button>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="section" id="group-3">
+        <div class="showcase-items">
+            <div class="showcase-item security">
+                <i class="bx bx-lock"></i>
+                <p class="highlight-text">Secure</p>
+                <p class="more-text">
+                    We use the latest technology to ensure your money is safe and secure.
+                </p>
+            </div>
+            <div class="showcase-item speed">
+                <i class="bx bx-rocket"></i>
+                <p class="highlight-text">Fast</p>
+                <p class="more-text">
+                    We make sure your money is delivered to your loved ones as fast as possible.
+                </p>
+            </div>
+            <div class="showcase-item reliability">
+                <i class="bx bx-check-circle"></i>
+                <p class="highlight-text">Reliable</p>
+                <p class="more-text">
+                    We are always available to help you with your money transfer needs.
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="section" id="footer">
+        <div class="branding">
+            <img src="{{ url_for('static', filename='assets/luisa_no_background.png') }}">
+            <p class="text">
+                Luisa Money
+            </p>
+        </div>
+        <div class="legal">
+            <p class="text">
+                &copy; Luisa Money
+            </p>
+        </div>
+        <div class="socials">
+            <a href=""><i class="bx bxl-twitter"></i></a>
+            <a href=""><i class="bx bxl-instagram"></i></a>
+            <a href=""><i class="bx bxl-facebook"></i></a>
+        </div>
+    </div>
+
+
+</div>
+<script>
+    //smooth scroll
+    const scroll = new SmoothScroll('a[href*="#"]', {
+        speed: 800
+    });
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-user.css') }}">
+
+    <title>Home | Luisa Money</title>
+{% endblock %}
+
+{% block maincontent %}
+    <div class="dashboard-container">
+        <div class="dashboard-container-inner">
+
+            <div class="section-1">
+                <div class="dashboard-text">Dashboard</div>
+                <div class="dashboard-search">
+                    <i class='bx bx-search'></i>
+                    <input type="search" placeholder="Search transaction">
+                </div>
+            </div>
+            <div class="section-2">
+                <div class="container-item">
+                    <div class="container-item-header">
+                        <p class="text">Balance</p>
+                        <i class='bx bx-money'></i>
+                    </div>
+                    <div class="container-item-body">
+                        <p class="text" id="account-balance">$12,520.29</p>
+                    </div>
+                    <div class="container-item-footer">
+                        <p class="text" id="account-balance-text">+4.7% from last month</p>
+                    </div>
+                </div>
+
+                <div class="container-item">
+                    <div class="container-item-header">
+                        <p class="text">Transactions</p>
+                        <i class='bx bx-wallet'></i>
+                    </div>
+                    <div class="container-item-body">
+                        <p class="text" id="account-transactions">+7</p>
+                    </div>
+                    <div class="container-item-footer">
+                        <p class="text" id="account-transactions-text">in the last week</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="section-3">
+                <div class="container-item" id="deposit-container">
+                    <div class="container-item-header">
+                        <p class="text">Deposit</p>
+                        <i class='bx bx-money-withdraw'></i>
+                    </div>
+                    <button>Deposit</button>
+                </div>
+                <div class="container-item" id="withdraw-container">
+                    <div class="container-item-header">
+                        <p class="text">Withdraw</p>
+                        <i class='bx bx-money-withdraw'></i>
+                    </div>
+                    <button>Withdraw</button>
+                </div>
+
+            </div>
+
+            <div class="section-4">
+                <div class="transactions-header">
+                    Recent Transactions
+                </div>
+                <div class="transactions-body">
+                    <table class="transactions">
+                        <tr>
+                            <th>ID</th>
+                            <th>Amount</th>
+                            <th>Transaction Type</th>
+                            <th>Date</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>$100</td>
+                            <td>Deposit</td>
+                            <td>2021-01-01</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>$100</td>
+                            <td>Deposit</td>
+                            <td>2021-01-01</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>$100</td>
+                            <td>Deposit</td>
+                            <td>2021-01-01</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>$100</td>
+                            <td>Deposit</td>
+                            <td>2021-01-01</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>$100</td>
+                            <td>Deposit</td>
+                            <td>2021-01-01</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>$100</td>
+                            <td>Deposit</td>
+                            <td>2021-01-01</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>$100</td>
+                            <td>Deposit</td>
+                            <td>2021-01-01</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>$100</td>
+                            <td>Deposit</td>
+                            <td>2021-01-01</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+
+            {#popups#}
+            <div class="popup-background">
+                <div class="deposit-popup">
+                    <form onsubmit="submitDeposit(event)">
+                        <p class="text">Enter the amount you want to deposit</p>
+                        <p class="text-rates">usd 1 = ksh 160</p>
+                        <div class="inputs-group">
+                            <input type="number" step="any" placeholder="Amount Ksh" id="deposit-amount-ksh">
+                            <input type="number" step="any" placeholder="Amount USD" id="deposit-amount-usd">
+                        </div>
+                        <button>Deposit</button>
+                    </form>
+                </div>
+                <div class="withdraw-popup">
+                    <form onsubmit="submitWithdraw(event)">
+                        <p class="text">Enter the amount you want to withdraw</p>
+                        <p class="text-rates">usd 1 = ksh 170</p>
+                        <div class="inputs-group">
+                            <input type="number" step="any" placeholder="Amount Ksh" id="withdraw-amount-ksh">
+                            <input type="number" step="any" placeholder="Amount USD" id="withdraw-amount-usd">
+                        </div>
+                        <button>Withdraw</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {% block scripts %}
+        <script>
+            //content update
+            const accountBalance = document.getElementById('account-balance');
+            const accountBalanceText = document.getElementById('account-balance-text');
+            const accountTransactions = document.getElementById('account-transactions');
+            const accountTransactionsText = document.getElementById('account-transactions-text');
+
+            function updateAccountInfo() {
+                //loading animation
+                accountBalance.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+                accountBalanceText.innerHTML = ' <p class="empty-text">...</p>'
+                accountTransactions.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+                accountTransactionsText.innerHTML = ' <p class="empty-text">...</p>'
+
+                //fetch balance from server
+                fetch('/account_info', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => {
+                        if (response.status === 200) {
+                            response.json().then(data => {
+                                if (data.success) {
+
+                                    accountBalance.innerHTML = data.balance
+                                    accountBalanceText.innerHTML = data.balance_text
+                                    accountTransactions.innerHTML = data.transactions
+                                    accountTransactionsText.innerHTML = data.transactions_text
+                                } else {
+                                    showNotif('error', data.message)
+                                }
+                            })
+                        } else {
+                            showNotif('error', 'An error occurred')
+                        }
+                    })
+                    .catch((error) => {
+                        showNotif('error', 'An error occurred')
+                    });
+            }
+
+            updateAccountInfo()
+
+            //transactions
+            const transactionsTable = document.querySelector('.transactions');
+            const transactionsTableBody = document.querySelector('.transactions tbody');
+            const transactionsContainer = document.querySelector('.transactions-body');
+
+            function updateTransactions() {
+                //remove all transactions (tr except first)
+                let transactions = transactionsTable.querySelectorAll('tr:not(:first-child)')
+                transactions.forEach(transaction => {
+                    transaction.remove()
+                })
+
+                //loading animation
+                transactionsLoading = document.createElement('div')
+                transactionsLoading.classList.add('transactions-loading')
+                transactionsLoading.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+                transactionsContainer.appendChild(transactionsLoading)
+
+                //fetch transactions from server
+                fetch('/transactions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then(response => {
+                        if (response.status === 200) {
+                            response.json().then(data => {
+                                if (data.success) {
+                                    transactionsLoading.remove()
+                                    data.transactions.forEach(transaction => {
+                                        let tr = document.createElement('tr')
+                                        tr.innerHTML = `
+                                            <td>${transaction.id}</td>
+                                            <td>$${transaction.amount}</td>
+                                            <td>${transaction.type}</td>
+                                            <td>${transaction.date}</td>
+                                        `
+                                        transactionsTableBody.appendChild(tr)
+                                    })
+                                } else {
+                                    showNotif('error', data.message)
+                                }
+                            })
+                        } else {
+                            showNotif('error', 'An error occurred')
+                        }
+                    })
+                    .catch((error) => {
+                        showNotif('error', 'An error occurred')
+                    });
+
+
+
+
+
+            }
+
+            updateTransactions()
+
+
+            //interactions
+            const depositBtn = document.querySelector('#deposit-container button');
+            const withdrawBtn = document.querySelector('#withdraw-container button');
+
+            const popupBackground = document.querySelector('.popup-background');
+            const depositPopup = document.querySelector('.deposit-popup');
+            const withdrawPopup = document.querySelector('.withdraw-popup');
+            const depositAmountKsh = document.querySelector('#deposit-amount-ksh');
+            const depositAmountUsd = document.querySelector('#deposit-amount-usd');
+            const withdrawAmountKsh = document.querySelector('#withdraw-amount-ksh');
+            const withdrawAmountUsd = document.querySelector('#withdraw-amount-usd');
+
+            depositBtn.addEventListener('click', () => {
+                popupBackground.classList.add('active');
+                depositPopup.classList.add('active');
+            });
+
+            withdrawBtn.addEventListener('click', () => {
+                popupBackground.classList.add('active');
+                withdrawPopup.classList.add('active');
+            });
+
+            popupBackground.addEventListener('click', (e) => {
+                if (e.target.classList.contains('popup-background')) {
+                    popupBackground.classList.remove('active');
+                    depositPopup.classList.remove('active');
+                    withdrawPopup.classList.remove('active');
+                }
+            });
+
+            depositAmountKsh.addEventListener('input', () => {
+                depositAmountUsd.value = (depositAmountKsh.value / 160).toFixed(2);
+            });
+
+            depositAmountUsd.addEventListener('input', () => {
+                depositAmountKsh.value = (depositAmountUsd.value * 160).toFixed(2);
+            });
+
+            withdrawAmountKsh.addEventListener('input', () => {
+                withdrawAmountUsd.value = (withdrawAmountKsh.value / 170).toFixed(2);
+            });
+
+            withdrawAmountUsd.addEventListener('input', () => {
+                withdrawAmountKsh.value = (withdrawAmountUsd.value * 170).toFixed(2);
+            });
+
+            function hideDepositPopup() {
+                popupBackground.classList.remove('active');
+                depositPopup.classList.remove('active');
+            }
+
+            function hideWithdrawPopup() {
+                popupBackground.classList.remove('active');
+                withdrawPopup.classList.remove('active');
+            }
+
+            function clearInputs() {
+                depositAmountKsh.value = ''
+                depositAmountUsd.value = ''
+                withdrawAmountKsh.value = ''
+                withdrawAmountUsd.value = ''
+            }
+
+
+            function submitDeposit(event) {
+                event.preventDefault()
+                let usdvalue = depositAmountUsd.value
+                let kshvalue = depositAmountKsh.value
+
+                showNotif('info', 'TODO:')
+
+                hideDepositPopup()
+                clearInputs()
+
+            };
+
+            function submitWithdraw(event) {
+                event.preventDefault()
+                let usdvalue = withdrawAmountUsd.value
+                let kshvalue = withdrawAmountKsh.value
+
+                showNotif('info', 'TODO:')
+
+                hideWithdrawPopup()
+                clearInputs()
+            }
+
+
+        </script>
+    {% endblock %}
+
+{% endblock %}
+

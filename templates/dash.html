@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <title>Dashboard</title>
+</head>
+<body>
+    <div class="container mt-4">
+        <header class="bg-dark text-white text-center py-3">
+        <h1>Welcome, <span class="username">Username</span></h1>
+    </header>
+    <main class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Current Balance</h2>
+                        <div class="balance-amount">$5,000.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 mt-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Deposit</h5>
+                                <div class="form-group">
+                                    <label for="deposit-amount">Amount:</label>
+                                    <input type="number" class="form-control" id="deposit-amount" placeholder="Enter amount...">
+                                </div>
+                                <button class="btn btn-primary">Deposit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mt-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Withdraw</h5>
+                                <div class="form-group">
+                                    <label for="withdraw-amount">Amount:</label>
+                                    <input type="number" class="form-control" id="withdraw-amount" placeholder="Enter amount...">
+                                </div>
+                                <button class="btn btn-danger">Withdraw</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 mt-4"></div>
+
+            <div class="col-md-12 mt-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Last 5 Transactions</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Date/Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Transaction data will be dynamically added here -->
+                                <tr>
+                                    <td>Deposit</td>
+                                    <td>$500.00</td>
+                                    <td>2024-01-13 10:00 AM</td>
+                                </tr>
+                                <tr>
+                                    <td>Withdraw</td>
+                                    <td>$14000</td>
+                                    <td>2024-01-14 10:00 PM</td>
+                                </tr>
+                                <tr>
+                                    <td>Withdraw</td>
+                                    <td>$14000</td>
+                                    <td>2024-01-14 10:00 PM</td>
+                                </tr>
+                                <tr>
+                                    <td>Deposit</td>
+                                    <td>$400</td>
+                                    <td>2024-01-14 10:00 PM</td>
+                                </tr>
+                                <tr>
+                                    <td>Deposit</td>
+                                    <td>$1000</td>
+                                    <td>2024-01-14 10:00 PM</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

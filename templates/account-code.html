@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='accountsetting.css') }}">
+
+</head>
+<body>
+
+<div class="account-header">
+    <h1>Account Settings</h1>
+</div>
+
+<div class="account-info">
+    <div class="account-info-item">
+        <h3 class="account-info-titles">Username:</h3>
+        <p id="account-username">{{ account.username }}</p>
+    </div>
+    <div class="account-info-item">
+        <h3 class="account-info-titles">Email:</h3>
+        <p id="account-email">{{ account.email }}</p>
+    </div>
+    <div class="account-info-item">
+        <h3 class="account-info-titles">Phone Number:</h3>
+        <p id="account-phone">{{ account.phone }}</p>
+    </div>
+</div>
+
+<main>
+    <section id="change-password">
+        <h2 class="account-headings">Change Password</h2>
+        <form onsubmit="changePassword(event)">
+            <label for="current-password">Current Password:</label>
+            <input type="password" id="current-password" name="current-password" required>
+
+            <label for="new-password">New Password:</label>
+            <input type="password" id="new-password" name="new-password" required>
+
+            <label for="confirm-password">Confirm New Password:</label>
+            <input type="password" id="confirm-password" name="new-password" required>
+
+            <button id="change-pass-btn" type="submit">Change Password</button>
+        </form>
+    </section>
+
+    <section id="change-email">
+        <h2 class="account-headings">Change Email Address</h2>
+        <form onsubmit="changeEmail(event)">
+            <label for="new-email">New Email Address:</label>
+            <input type="email" id="new-email" name="new-email" required>
+
+            <button id="change-email-btn" type="submit">Change Email</button>
+        </form>
+    </section>
+
+    <section>
+        <h2 class="account-headings">Change Phone Number</h2>
+        <form onsubmit="changeNumber(event)">
+            <label for="new-number">New Phone Number:</label>
+            <input type="tel" id="new-number" name="new-number" required>
+
+            <button id="change-number-btn" type="submit">Change Phone Number</button>
+        </form>
+    </section>
+
+
+    <section id="change-username">
+        <h2 class="account-headings">Change Username</h2>
+        <form onsubmit="changeUsername(event)">
+            <label for="new-username">New Username:</label>
+            <input type="text" id="new-username" name="new-username" required>
+
+            <button id="change-username-btn" type="submit">Change Username</button>
+        </form>
+    </section>
+
+
+    <section id="delete-account">
+        {% if account.account_deleted == 1 %}
+            <h2 class="account-headings">Delete Account</h2>
+            <p>Your Account is awaiting deletion</p>
+            <button id="cancel-delete-btn" onclick="cancelAccountDeletion()">Cancel Account Deletion</button>
+        {% else %}
+            <h2 class="account-headings">Delete Account</h2>
+            <p>Delete your account?</p>
+            <button id="delete-btn">Delete Account</button>
+        {% endif %}
+    </section>
+</main>
+
+<div class="delete-account-modal">
+    <form onsubmit="submitAccountDeletion(event)" id="reset-password">
+        <p>Please enter your password to confirm account deletion.</p>
+        <div class="input-group">
+            <input type="text" placeholder="password" name="delete-password" id="delete-password"
+                   required>
+        </div>
+        <div class="input-group">
+            <button type="submit" id="delete-password-submit-btn">Delete account</button>
+        </div>
+    </form>
+</div>
+
+
+<script>
+
+    //account info
+    const accountUsername = document.getElementById('account-username');
+    globalAccountUsername = document.getElementById('global-account-username');
+    const accountEmail = document.getElementById('account-email');
+    const accountPhone = document.getElementById('account-phone');
+
+    // Change Password
+    function changePassword(event) {
+        event.preventDefault();
+        const currentPassword = document.getElementById('current-password').value;
+        const newPassword = document.getElementById('new-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        //fields
+        const currentPasswordField = document.getElementById('current-password');
+        const newPasswordField = document.getElementById('new-password');
+        const confirmPasswordField = document.getElementById('confirm-password');
+
+        const changePassBtn = document.getElementById('change-pass-btn');
+
+        changePassBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+        fetch('/change_password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                currentPassword, newPassword, confirmPassword
+            })
+        })
+            .then(response => {
+                changePassBtn.innerHTML = 'Change Password'
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.success) {
+                            showNotif('success', data.message);
+                            currentPasswordField.value = '';
+                            newPasswordField.value = '';
+                            confirmPasswordField.value = '';
+                        } else {
+                            showNotif('error', data.message);
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        console.log(data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+
+    }
+
+    // Change Email
+    function changeEmail(event) {
+        event.preventDefault();
+        const newEmail = document.getElementById('new-email').value;
+        const newEmailField = document.getElementById('new-email');
+        const changeEmailBtn = document.getElementById('change-email-btn');
+
+        changeEmailBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+        fetch('/change_email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                newEmail
+            })
+        })
+            .then(response => {
+                changeEmailBtn.innerHTML = 'Change Email'
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.success) {
+                            showNotif('success', data.message);
+                            newEmailField.value = '';
+                            accountEmail.innerHTML = newEmail;
+                        } else {
+                            showNotif('error', data.message);
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        console.log(data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    }
+
+    // Change Phone Number
+    function changeNumber(event) {
+        event.preventDefault();
+        const changeNumber = document.getElementById('new-number').value;
+        const changeNumberField = document.getElementById('new-number');
+        const changeNumberBtn = document.getElementById('change-number-btn');
+
+        changeNumberBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+        fetch('/change_number', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                changeNumber
+            })
+        })
+            .then(response => {
+                changeNumberBtn.innerHTML = 'Change Phone Number'
+
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.success) {
+                            showNotif('success', data.message);
+                            changeNumberField.value = '';
+                            accountPhone.innerHTML = changeNumber;
+                        } else {
+                            showNotif('error', data.message);
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        console.log(data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    }
+
+    // Change Username
+    function changeUsername(event) {
+        event.preventDefault();
+        const newUsername = document.getElementById('new-username').value;
+        const newUsernameField = document.getElementById('new-username');
+        const changeUsernameBtn = document.getElementById('change-username-btn');
+
+        changeUsernameBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+        fetch('/change_username', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                newUsername
+            })
+        })
+            .then(response => {
+                changeUsernameBtn.innerHTML = 'Change Username'
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.success) {
+                            showNotif('success', data.message);
+                            newUsernameField.value = '';
+                            accountUsername.innerHTML = newUsername;
+                            globalAccountUsername.innerHTML = newUsername;
+                        } else {
+                            showNotif('error', data.message);
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        console.log(data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    }
+
+    // Delete Account
+    const deleteAccountBtn = document.getElementById('delete-btn');
+    const deleteAccountModal = document.querySelector('.delete-account-modal');
+
+    deleteAccountModal.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-account-modal')) {
+            hideDeleteAccountModal();
+        }
+    })
+    deleteAccountBtn.addEventListener('click', () => {
+        showDeleteAccountModal();
+    })
+
+    function showDeleteAccountModal() {
+        const deletePassword = document.getElementById('delete-password');
+        const deleteAccountModal = document.querySelector('.delete-account-modal');
+        deleteAccountModal.classList.add('active');
+        deletePassword.focus();
+    }
+
+    function hideDeleteAccountModal() {
+        const deleteAccountModal = document.querySelector('.delete-account-modal');
+        deleteAccountModal.classList.remove('active');
+    }
+
+    //close modal
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && deleteAccountModal.classList.contains('active')) {
+            hideDeleteAccountModal();
+        }
+    })
+
+    function submitAccountDeletion(event) {
+        event.preventDefault();
+        const deletePassword = document.getElementById('delete-password').value;
+        const deletePasswordField = document.getElementById('delete-password')
+
+        const deletePasswordSubmitBtn = document.getElementById('delete-password-submit-btn');
+
+        deletePasswordSubmitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+        fetch('/delete_account', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                deletePassword
+            })
+        })
+            .then(response => {
+                deletePasswordSubmitBtn.innerHTML = 'Delete account'
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.success) {
+                            showNotif('success', data.message);
+                            showNotif('success', 'Logging you out...')
+                            deletePasswordField.value = '';
+                            hideDeleteAccountModal();
+
+                            // redirect to login page after 3 seconds
+                            setTimeout(() => {
+                                window.location.href = '/logout';
+                            }, 3000);
+
+                        } else {
+                            showNotif('error', data.message);
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        console.log(data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    }
+
+    // Cancel Account Deletion
+    const cancelDeleteAccountBtn = document.getElementById('cancel-delete-btn');
+    cancelDeleteAccountBtn.addEventListener('click', () => {
+        cancelAccountDeletion();
+    })
+
+    function cancelAccountDeletion() {
+
+        const cancelDeleteAccountBtn = document.getElementById('cancel-delete-btn');
+
+        fetch('/cancel_delete_account', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.success) {
+                            showNotif('success', data.message);
+                            cancelDeleteAccountBtn.innerHTML = 'Account Deletion Cancelled';
+                            cancelDeleteAccountBtn.disabled = true;
+
+                        } else {
+                            showNotif('error', data.message);
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        console.log(data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // TODO: update page fields
+
+</script>
+</body>
+</html>

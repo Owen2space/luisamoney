@@ -1,0 +1,7 @@
+.highlight{
+    color: purple;
+    cursor: pointer;
+}
+.highlight:hover{
+    text-decoration: underline;
+}

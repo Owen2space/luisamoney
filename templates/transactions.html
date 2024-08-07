@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='transactions.css') }}">
+    <title>Transactions | Luisa Money</title>
+{% endblock %}
+
+{% block maincontent %}
+    <div class="transactions-page">
+        <div class="transactions-page-header">
+            <p class="transactions-page-title">Transactions</p>
+            <div class="transactions-search">
+                <i class="bx bx-search"></i>
+                <input type="search" id="transactions-search-input" placeholder="Search transactions">
+                <div class="transactions-search-results">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="transactions-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Amount</th>
+                    <th>Type</th>
+                    <th>Tr_id</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        // Get transactions
+        const transactionsTableContainer = document.querySelector('.transactions-table');
+
+        function updateTransactions() {
+            // clear table
+            transactionsTableContainer.querySelector('tbody').innerHTML = '';
+
+            // loading animation
+            transactionsLoadingContainer = document.createElement('div');
+            transactionsLoadingContainer.classList.add('transactions-loading');
+            transactionsLoadingContainer.innerHTML = `<i class="bx bx-loader-alt bx-spin"></i>`;
+            transactionsTableContainer.appendChild(transactionsLoadingContainer);
+
+            transactionsTableContent = transactionsTableContainer.querySelector('tbody');
+
+            // get transactions
+            fetch('/transactions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        response.json().then(data => {
+                            if (data.success) {
+                                data.transactions.forEach(transaction => {
+                                    let tr = document.createElement('tr')
+                                    tr.innerHTML = `
+                                            <td>${transaction.id}</td>
+                                            <td>$${transaction.amount}</td>
+                                            <td>${transaction.type}</td>
+                                            <td>${transaction.transaction_id}</td>
+                                            <td>${transaction.date}</td>
+                                        `
+                                    transactionsTableContent.appendChild(tr)
+
+                                    // hide loading animation
+                                    transactionsLoadingContainer.remove();
+
+
+                                })
+                            } else {
+                                showNotif('error', data.message)
+                            }
+                        })
+                    } else {
+                        showNotif('error', 'An error occurred')
+                    }
+                })
+                .catch((error) => {
+                    showNotif('error', 'An error occurred')
+                });
+
+
+        }
+
+        updateTransactions();
+
+
+        // Search transactions
+        const transactionsSearchInput = document.querySelector('#transactions-search-input');
+        const transactionsSearchResults = document.querySelector('.transactions-search-results');
+
+        transactionsSearchInput.addEventListener('input', () => {
+            if (transactionsSearchInput.value.length < 1 || transactionsSearchInput.value === ' ') {
+                transactionsSearchResults.classList.remove('active');
+                return;
+            }
+            updateSearchResults()
+
+        });
+
+        function appendSearchResult(transaction) {
+            const searchLoader = document.querySelector('.search-loader')
+            searchLoader.classList.add('hidden')
+
+
+            let searchResult = document.createElement('div');
+            searchResult.classList.add('search-result');
+            searchResult.innerHTML = `
+                <p class="search-result-amount">$${transaction.amount}</p>
+                <p class="search-result-type">${transaction.type}</p>
+                <p class="search-result-date">${transaction.date}</p>
+            `
+            transactionsSearchResults.appendChild(searchResult)
+        }
+
+        function updateSearchResults() {
+            const inputValue = transactionsSearchInput.value;
+            if (transactionsSearchResults.classList.contains('active')) {
+
+            } else {
+                transactionsSearchResults.classList.add('active');
+            }
+            transactionsSearchResults.innerHTML = '<div class="search-loader"><i class="bx bx-loader-alt bx-spin"></i></div>';
+            // get transactions
+
+            fetch('/transactions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        response.json().then(data => {
+                            if (data.success) {
+                                // no results
+                                if (data.transactions.length < 1) {
+                                    transactionsSearchResults.innerHTML = `<div class="search-loader"><p>No results for ${inputValue}</p></div>`;
+                                    return;
+                                }
+
+                                data.transactions.forEach(transaction => {
+                                    searchInputValue = transactionsSearchInput.value.toLowerCase()
+                                    if (transaction.amount.toString().includes(searchInputValue) || transaction.type.toString().includes(searchInputValue) || transaction.transaction_id.toString().includes(searchInputValue)) {
+                                        appendSearchResult(transaction)
+                                    }
+                                })
+
+                                if (transactionsSearchResults.innerHTML === '<div class="search-loader"><i class="bx bx-loader-alt bx-spin"></i></div>') {
+                                    transactionsSearchResults.innerHTML = `<div class="search-loader"><p>No results for ${inputValue}</p></div>`;
+                                }
+
+                            } else {
+                                showNotif('error', data.message)
+                            }
+                        })
+                    } else {
+                        showNotif('error', 'An error occurred')
+                    }
+                })
+                .catch((error) => {
+                    showNotif('error', 'An error occurred')
+                });
+
+
+        }
+
+    //    transactionsSearchInput.addEventListener('focusout', () => {
+    //        const searchLoader = document.querySelector('.search-loader')
+    //        searchLoader.classList.add('hidden')
+    //        transactionsSearchResults.classList.remove('active');
+    //    })
+
+
+    </script>
+{% endblock %}
+

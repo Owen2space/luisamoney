@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <title>Dashboard</title>
+</head>
+
+<body>
+<div class="container ">
+    <div class="container-title-header">
+        <h1 class="container-header-title">Dashboard</h1>
+    </div>
+    <main class="main-container-all">
+        <div class="group-upper">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title">Current Balance</p>
+                        <div class="balance-amount">$5,000.00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="bal-containers-dual">
+            <div class="col-md-6 ">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title">Deposit</p>
+                        <div class="form-group">
+                            <label for="deposit-amount">Amount:</label>
+                            <input type="number" class="form-control" id="deposit-amount" placeholder="Enter amount...">
+                        </div>
+                        <button class="btn btn-primary">Deposit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 ">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-title">Withdraw</p>
+                        <div class="form-group">
+                            <label for="withdraw-amount">Amount:</label>
+                            <input type="number" class="form-control" id="withdraw-amount"
+                                   placeholder="Enter amount...">
+                        </div>
+                        <button class="btn btn-danger">Withdraw</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-12 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title">Transactions</p>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Date/Time</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Transaction data will be dynamically added here -->
+                        <tr>
+                            <td>Deposit</td>
+                            <td>$500.00</td>
+                            <td>2024-01-13 10:00 AM</td>
+                        </tr>
+                        <tr>
+                            <td>Withdraw</td>
+                            <td>$14000</td>
+                            <td>2024-01-14 10:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td>Withdraw</td>
+                            <td>$14000</td>
+                            <td>2024-01-14 10:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td>Deposit</td>
+                            <td>$400</td>
+                            <td>2024-01-14 10:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td>Deposit</td>
+                            <td>$1000</td>
+                            <td>2024-01-14 10:00 PM</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+
+
+<script>
+
+    function fetchBalance() {
+        const accountBalance = document.querySelector('.balance-amount');
+        //get the current balance from the server
+        //loading animation
+        accountBalance.innerHTML = 'Loading...';
+
+        fetch('/user/balance')
+            .then(response => response.json())
+            .then(data => {
+                accountBalance.innerHTML = `$${data.balance}`;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+    }
+
+    fetchBalance();
+
+</script>
+
+</html>

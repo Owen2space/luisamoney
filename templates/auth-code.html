@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
+    {#boxicons#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.
+com/ajax/libs/boxicons/2.0.7/css/boxicons.min.css">
+
+    <title>Signup</title>
+</head>
+<body>
+<div class="auth-container">
+    <div class="auth-forms">
+        <div class="form-feedback">
+            <p id="feedback-text"></p>
+        </div>
+        <div class="auth-tabs">
+            <div class="auth-tab login active" id="login-tab">Log in</div>
+            <div class="auth-tab register" id="signup-tab">Register</div>
+            <div class="auth-tab password-reset" id="password-reset">Reset password</div>
+        </div>
+        <div id="signup-form" class="forms-containers">
+            <form onsubmit="submitregister(event)">
+                <div class="container">
+                    <div class="input-group">
+                        <label for="firstname">First Name</label>
+                        <input type="text" placeholder="first name" name="firstname" id="register-firstname"
+                               required>
+                    </div>
+                    <div class="input-group">
+                        <label for="surname">Surname</label>
+                        <input type="text" placeholder="Last Name" name="surname" id="register-surname" required>
+                    </div>
+                    <div class="dropdown-input-group">
+                        <label for="otp-method">Otp Method</label>
+                        <select name="otp-method" id="otp-method-selector">
+                            <option value="email">Email</option>
+                            <option value="sms">SMS</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" placeholder="Email" id="otp-method-input" name="otp-method-input"
+                               required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Phone</label>
+                        <input type="tel" placeholder="Phone" id="register-phone" name="register-phone"
+                               required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" placeholder="Password" name="password" id="register-password"
+                               required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Confirm Password</label>
+                        <input type="password" placeholder="Confirm Password" name="password"
+                               id="register-password-confirm" required>
+                    </div>
+                    <div class="input-group">
+                        <button type="submit" id="register-btn">Sign Up</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="login-form" class="forms-containers active">
+            <form onsubmit="submitlogin(event)">
+                <div class="input-group">
+                    <label for="name">Username/Email</label>
+                    <input type="username" placeholder="username/email" name="name" id="login-name"
+                           required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" placeholder="password" name="password" id="login-password" required>
+                </div>
+                <div class="input-group">
+                    <button type="submit" id="login-btn">Login</button>
+                </div>
+            </form>
+        </div>
+        <div id="password-reset-form" class="forms-containers">
+            <form onsubmit="submitPassReset(event)">
+                <div class="input-group">
+                    <label for="email">Username/Email</label>
+                    <input type="username" placeholder="Username/Email" name="email" id="reset-username"
+                           required>
+                </div>
+                <div class="input-group">
+                    <button type="submit" id="reset-btn">Reset Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="username-selector">
+        <div class="username-selector-messages">
+            <p id="username-selector-message">||</p>
+        </div>
+
+        <form onsubmit="submitusername(event)" id="username-selector">
+            <p>Please choose a username</p>
+            <p class="nb">This username will be used to log in.</p>
+            <div class="input-group">
+                <input type="text" placeholder="username" name="username" id="register-username"
+                       required>
+            </div>
+            <div class="input-group">
+                <button type="submit" id="username-selector-submit-btn">Submit</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="verification-2fa">
+        <div class="verification-2fa-messages">
+            <p id="verification-2fa-message">||</p>
+        </div>
+
+        <form onsubmit="submit2facode(event)" id="verification-2fa">
+            <p>Please enter the 2FA code sent to your email.</p>
+            <div class="input-group">
+                <input type="text" placeholder="2FA code" name="code-2fa" id="2fa-code"
+                       required>
+            </div>
+            <div class="input-group">
+                <button type="submit" id="verification-2fa-submit-btn">Submit</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="reset-2fa">
+        <div class="reset-2fa-messages">
+            <p id="reset-2fa-messages">||</p>
+
+        </div>
+        <form onsubmit="submitresetcode(event)" id="reset-2fa">
+            <p>Please enter the code sent to your email.</p>
+            <div class="input-group">
+                <input type="text" placeholder="code" name="reset-code-2fa" id="reset-2fa-code"
+                       required>
+            </div>
+            <div class="input-group">
+                <button type="submit" id="reset-2fa-submit-btn">Submit</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="reset-password">
+        <div class="reset-password-messages">
+            <p id="reset-password-messages">||</p>
+
+        </div>
+        <form onsubmit="submitnewpassword(event)" id="reset-password">
+            <p>Please enter your new passord.</p>
+            <div class="input-group">
+                <input type="text" placeholder="new password" name="reset-password" id="reset-password-code"
+                       required>
+            </div>
+            <div class="input-group">
+                <button type="submit" id="reset-password-submit-btn">Change password</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    //form notifs
+    function setFormNotif(message) {
+        const formNotifsContainer = document.querySelector(".form-feedback")
+        const formNotifText = document.getElementById("feedback-text")
+        if (formNotifsContainer.classList.contains("active")) {
+            formNotifText.innerText = message
+        } else {
+            formNotifsContainer.classList.add("active")
+            formNotifText.innerText = message
+        }
+    }
+
+
+    //tabs
+    const loginTab = document.getElementById("login-form")
+    const registerTab = document.getElementById("signup-form")
+    const passwordResetTab = document.getElementById("password-reset-form")
+
+    const loginTabBtn = document.querySelector(".auth-tab.login")
+    const registerTabBtn = document.querySelector(".auth-tab.register")
+    const passwordResetTabBtn = document.querySelector(".auth-tab.password-reset")
+
+    loginTabBtn.addEventListener("click", () => {
+        loginTab.classList.add("active")
+        loginTabBtn.classList.add("active")
+        registerTab.classList.remove("active")
+        name = "reset-username"
+        registerTabBtn.classList.remove("active")
+        passwordResetTab.classList.remove("active")
+        passwordResetTabBtn.classList.remove("active")
+    })
+
+    registerTabBtn.addEventListener("click", () => {
+        loginTab.classList.remove("active")
+        loginTabBtn.classList.remove("active")
+        registerTab.classList.add("active")
+        registerTabBtn.classList.add("active")
+        passwordResetTab.classList.remove("active")
+        passwordResetTabBtn.classList.remove("active")
+    })
+
+    passwordResetTabBtn.addEventListener("click", () => {
+        loginTab.classList.remove("active")
+        loginTabBtn.classList.remove("active")
+        registerTab.classList.remove("active")
+        registerTabBtn.classList.remove("active")
+        passwordResetTab.classList.add("active")
+        passwordResetTabBtn.classList.add("active")
+    })
+
+    //forms
+    //register
+    //input types
+    const registerOtpSelector = document.getElementById("otp-method-selector")
+    const registerOtpInput = document.getElementById("otp-method-input")
+
+    registerOtpSelector.addEventListener("change", () => {
+        if (registerOtpSelector.value == "email") {
+            registerOtpInput.placeholder = "Email"
+            registerOtpInput.type = "email"
+        } else if (registerOtpSelector.value == "sms") {
+            registerOtpInput.placeholder = "Phone Number"
+            registerOtpInput.type = "tel"
+        }
+    })
+
+
+    function submitregister(event) {
+        const registerName1 = document.getElementById("register-firstname").value
+        const registerName2 = document.getElementById("register-surname").value
+        const registerOtp = document.getElementById("otp-method-selector").value
+        const email = document.getElementById("otp-method-input").value
+        const phone = document.getElementById("register-phone").value
+        const password1 = document.getElementById("register-password").value
+        const password2 = document.getElementById("register-password-confirm").value
+        const registerBtn = document.getElementById("register-btn")
+        event.preventDefault()
+
+        //form validation
+        if (password1 != password2) {
+            setFormNotif("Passwords don't match")
+        } else if (password1.length < 8) {
+            setFormNotif("Password should be 8 or more characters")
+        } else if (password1.length > 16) {
+            setFormNotif("Password should be 16 or less characters")
+        } else if (registerOtp == "email" && !email.includes("@")) {
+            setFormNotif("Please enter a valid email address")
+        } else if (registerOtp == "sms" && phone.length != 10) {
+            setFormNotif("Please enter a valid phone number")
+        } else {
+
+            registerBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+
+            fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    registerName1, registerName2, registerOtp, email, phone, password1, password2
+                }),
+
+            })
+                .then(response => {
+                    registerBtn.innerHTML = 'Sign Up'
+
+                    if (response.status === 200) {
+                        response.json().then(data => {
+                            setFormNotif(data.message);
+                            if (data.message == "Account created successfully!") {
+                                const tfaForm = document.querySelector(".verification-2fa")
+                                tfaForm.classList.add("active")
+                            }
+                        });
+
+                    } else {
+                        response.json().then(data => {
+                            setFormNotif(data.message);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    }
+
+    //2fa
+    function submit2facode(event) {
+        const code2fa = document.getElementById("2fa-code").value
+        const submit2faBtn = document.getElementById("verification-2fa-submit-btn")
+
+        event.preventDefault()
+
+        submit2faBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+
+        fetch('/verify_otp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                code2fa
+            })
+        })
+            .then(response => {
+                submit2faBtn.innerHTML = 'Submit'
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.message == "OTP verified successfully!") {
+                            const tfaForm = document.querySelector(".verification-2fa")
+                            const usernameSelectForm = document.querySelector(".username-selector")
+                            tfaForm.classList.remove("active")
+                            usernameSelectForm.classList.add("active")
+                        } else {
+                            const messageBox = document.querySelector(".verification-2fa-messages")
+                            const messageBoxMessageText = document.getElementById("verification-2fa-message")
+
+                            if (messageBox.classList.contains('active')) {
+                                messageBoxMessageText.innerText = data.message;
+                            } else {
+                                messageBox.classList.add('active');
+                                messageBoxMessageText.innerText = data.message;
+                            }
+                        }
+                    });
+                } else {
+                    response.json().then(data => {
+                        const messageBox = document.querySelector(".verification-2fa-messages")
+                        const messageBoxMessageText = document.getElementById("verification-2fa-message")
+
+                        if (messageBox.classList.contains('active')) {
+                            messageBoxMessageText.innerText = data.message;
+                        } else {
+                            messageBox.classList.add('active');
+                            messageBoxMessageText.innerText = data.message;
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function showUsernameSubmitMessage(message) {
+        const messageBox = document.querySelector(".username-selector-messages")
+        const messageBoxMessageText = document.getElementById("username-selector-message")
+        console.log(messageBoxMessageText)
+
+
+        if (messageBox.classList.contains('active')) {
+            messageBoxMessageText.innerText = message;
+        } else {
+            messageBox.classList.add('active');
+            messageBoxMessageText.innerText = message;
+        }
+    }
+
+    function submitusername(event) {
+        event.preventDefault()
+
+        const newUsername = document.getElementById("register-username").value
+        const usernameSubmitBtn = document.getElementById("username-selector-submit-btn")
+
+        usernameSubmitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+        fetch('/setusername', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                newUsername
+            })
+        })
+            .then(response => {
+                usernameSubmitBtn.innerHTML = 'Submit'
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        showUsernameSubmitMessage(data.message);
+
+                        if (data.message == "Username set successfully") {
+                            setTimeout(function () {
+                                window.location.href = '/';
+                            }, 1000);
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        setFormNotif(data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    //login
+    function submitlogin(event) {
+        const nameEmailPhone = document.getElementById("login-name").value
+        const loginPass = document.getElementById("login-password").value
+        const loginBtn = document.getElementById("login-btn")
+
+        event.preventDefault()
+
+        loginBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nameEmailPhone, loginPass
+            })
+        })
+            .then(response => {
+                loginBtn.innerHTML = 'Login'
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.success) {
+                            setTimeout(function () {
+                                window.location.href = '/';
+                            }, 500);
+                        } else {
+                            showNotif("error", data.message)
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        showNotif("error", data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+
+    //reset
+    function submitPassReset(event) {
+        const resetEmailNamePhone = document.getElementById("reset-username").value
+        const resetBtn = document.getElementById("reset-btn")
+
+        event.preventDefault()
+
+        resetBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+        fetch('/resetpass', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                resetEmailNamePhone
+            })
+        })
+            .then(response => {
+                resetBtn.innerHTML = 'Reset Password'
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.message == "Check your email for an otp code!") {
+                            {
+                                setFormNotif("test")
+                            }
+                            const reset2faForm = document.querySelector(".reset-2fa")
+
+                            reset2faForm.classList.add("active")
+
+                        } else {
+                            setFormNotif(data.message)
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        setFormNotif(data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    }
+
+    function submitresetcode(event) {
+        event.preventDefault()
+        const resetCode = document.getElementById("reset-2fa-code").value
+        const resetEmailNamePhone = document.getElementById("reset-username").value
+        const resetBtn = document.getElementById("reset-btn")
+
+        resetBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+        fetch('/verify_reset', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                resetCode, resetEmailNamePhone
+            })
+        })
+            .then(response => {
+                resetBtn.innerHTML = 'Submit'
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.message == "OTP verified successfully!") {
+                            const reset2faForm = document.querySelector(".reset-2fa")
+                            const newPassForm = document.querySelector(".reset-password")
+                            reset2faForm.classList.remove("active")
+                            newPassForm.classList.add("active")
+                        } else {
+                            const messageBox = document.querySelector(".reset-2fa-messages")
+                            const messageBoxMessageText = document.getElementById("reset-2fa-messages")
+
+                            if (messageBox.classList.contains('active')) {
+                                messageBoxMessageText.innerText = data.message;
+                            } else {
+                                messageBox.classList.add('active');
+                                messageBoxMessageText.innerText = data.message;
+                            }
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        const messageBox = document.querySelector(".reset-2fa-messages")
+                        const messageBoxMessageText = document.getElementById("reset-2fa-messages")
+
+                        if (messageBox.classList.contains('active')) {
+                            messageBoxMessageText.innerText = data.message;
+                        } else {
+                            messageBox.classList.add('active');
+                            messageBoxMessageText.innerText = data.message;
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    }
+
+    function submitnewpassword(event) {
+        event.preventDefault()
+        const newPassword = document.getElementById("reset-password-code").value
+        const resetCode = document.getElementById("reset-2fa-code").value
+        const resetEmailNamePhone = document.getElementById("reset-username").value
+        const resetBtn = document.getElementById("reset-password-submit-btn")
+
+        resetBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i>'
+
+        fetch('/setnewpass', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                newPassword, resetEmailNamePhone, resetCode
+            })
+        })
+            .then(response => {
+                resetBtn.innerHTML = 'Change password'
+                if (response.status === 200) {
+                    response.json().then(data => {
+                        if (data.message == "Password updated successfully!") {
+                            const changePassMessage = document.querySelector(".reset-password-messages")
+                            const changePassMessageText = document.getElementById("reset-password-messages")
+                            changePassMessage.classList.add("active")
+                            changePassMessageText.innerText = data.message
+                            setTimeout(function () {
+                                window.location.href = '/login';
+                            }, 1000);
+                        } else {
+                            console.log(data.message)
+                        }
+                    });
+
+                } else {
+                    response.json().then(data => {
+                        setFormNotif(data.message);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    }
+
+
+</script>
+
+</body>
+</html>

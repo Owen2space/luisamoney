@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='boxicons-2.1.4/css/boxicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard-user.css') }}">
+
+    <title>Document</title>
+</head>
+<body>
+<div class="dashboard-container">
+    <div class="section-1">
+        <div class="dashboard-text">Dashboard</div>
+        <div class="dashboard-search">
+            <i class='bx bx-search'></i>
+            <input type="search" placeholder="Search transaction">
+        </div>
+    </div>
+    <div class="section-2">
+        <div class="container-item">
+            <div class="container-item-header">
+                <p class="text">Balance</p>
+                <i class='bx bx-money'></i>
+            </div>
+            <div class="container-item-body">
+                <p class="text">$12,520.29</p>
+            </div>
+            <div class="container-item-footer">
+                <p class="text">+4.7% from last month</p>
+            </div>
+        </div>
+
+        <div class="container-item">
+            <div class="container-item-header">
+                <p class="text">Transactions</p>
+                <i class='bx bx-wallet'></i>
+            </div>
+            <div class="container-item-body">
+                <p class="text">+7</p>
+            </div>
+            <div class="container-item-footer">
+                <p class="text">in the last week</p>
+            </div>
+        </div>
+
+    </div>
+    <div class="section-3">
+        <div class="container-item" id="deposit-container">
+            <div class="container-item-header">
+                <p class="text">Deposit</p>
+                <i class='bx bx-money-withdraw'></i>
+            </div>
+            <button>Deposit</button>
+        </div>
+        <div class="container-item" id="withdraw-container">
+            <div class="container-item-header">
+                <p class="text">Withdraw</p>
+                <i class='bx bx-money-withdraw'></i>
+            </div>
+            <button>Withdraw</button>
+        </div>
+
+    </div>
+
+    <div class="section-4">
+        <div class="transactions-header">
+            Recent Transactions
+        </div>
+        <div class="transactions-body">
+            <table class="transactions">
+                <tr>
+                    <th>ID</th>
+                    <th>Amount</th>
+                    <th>Transaction Type</th>
+                    <th>Date</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>$100</td>
+                    <td>Deposit</td>
+                    <td>2021-01-01</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>$100</td>
+                    <td>Deposit</td>
+                    <td>2021-01-01</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>$100</td>
+                    <td>Deposit</td>
+                    <td>2021-01-01</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>$100</td>
+                    <td>Deposit</td>
+                    <td>2021-01-01</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>$100</td>
+                    <td>Deposit</td>
+                    <td>2021-01-01</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>$100</td>
+                    <td>Deposit</td>
+                    <td>2021-01-01</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>$100</td>
+                    <td>Deposit</td>
+                    <td>2021-01-01</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>$100</td>
+                    <td>Deposit</td>
+                    <td>2021-01-01</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // update balance
+    function updateBalance(){
+        const balance = document.querySelector('.container-item-body .text');
+        //loafing animation
+        balance.innerHTML = '<i class="bx bx-loader bx-spin"></i>';
+        // get balance from server
+        const balanceFromServer = 1000;
+        // update balance
+        balance.innerHTML = `$${balanceFromServer}`;
+
+
+    }
+    updateBalance();
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+.transactions-page {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .transactions-page {
+        padding: 10px;
+        gap: 10px;
+    }
+}
+
+.transactions-page .transactions-page-header {
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.transactions-page .transactions-page-header .transactions-search {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    position: relative;
+    z-index: 9;
+}
+
+.transactions-page .transactions-page-header .transactions-search .transactions-search-results {
+    display: none;
+}
+
+.transactions-page .transactions-page-header .transactions-search .transactions-search-results.active {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 9;
+}
+
+
+.transactions-search-results .search-loader {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 20px ;
+    color: #888;
+}
+
+.transactions-search-results .search-loader p{
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 400;
+    color: inherit;
+    text-align: center;
+}
+
+.transactions-search-results .search-loader.hidden {
+    display: none;
+}
+
+.transactions-search-results .search-result {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px #888;
+    margin-bottom: 1px;
+    font-weight: 400;
+}
+
+.transactions-search-results .search-result p {
+    margin: 0;
+    padding: 0;
+    font-size: 15px;
+}
+
+.transactions-page .transactions-page-header .transactions-search i {
+    position: absolute;
+    padding: 10px;
+    font-size: 20px;
+    color: #000;
+}
+
+.transactions-page .transactions-page-header .transactions-search input {
+    padding: 10px 10px 10px 40px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+.transactions-page .transactions-table {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.transactions-page .transactions-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transactions-page .transactions-table table th {
+    padding: 15px;
+    text-align: left;
+    font-size: 15px;
+}
+
+.transactions-page .transactions-table table td {
+    padding: 10px 15px;
+    border-top: 1px solid #ddd;
+    text-align: left;
+    font-size: 15px;
+}
+
+
+.transactions-table .transactions-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    border-top: 1px solid #ddd;
+}

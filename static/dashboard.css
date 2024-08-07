@@ -1,0 +1,162 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /*outline: 1px solid red;*/
+}
+
+/*header*/
+.container-title-header {
+    padding: 0 15px;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    /*max-width: 1000px;*/
+    margin: 0 auto;
+    padding: 0 15px;
+    height: 100%;
+    overflow: hidden;
+}
+
+header {
+    background-color: #343a40;
+    color: #fff;
+    padding: 15px 0 15px 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 15px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 5px;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 600;
+
+}
+
+.form-group {
+    margin-bottom: 10px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-group label {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.form-group input {
+    flex: 1;
+    margin-left: 10px;
+    padding: 4px 15px;
+    border-radius: 5px;
+    border: 2px solid #888;
+}
+
+input#deposit-amount,
+input#withdraw-amount {
+    font-size: 18px;
+    align-items: center;
+}
+
+/* Adjusted font sizes for deposit and withdraw sections */
+.card .card-body button {
+    font-size: 20px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-md-12 {
+    flex: 1;
+    max-width: 100%;
+}
+
+/* Additional styling for balance display */
+
+.balance-amount {
+    font-size: 24px;
+    font-weight: bold;
+    color: #28a745; /* Green color, you can adjust as needed */
+    margin-top: 10px;
+}
+
+/* Responsive layout for tablets */
+@media only screen and (max-width: 600px) {
+    .col-md-6 {
+        flex: 1;
+    }
+}
+
+.main-container-all{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px;
+}
+
+.group-upper,
+.bal-containers-dual {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 20px;
+    flex: 1;
+}
+
+/* Responsive layout for larger screens */
+@media only screen and (min-width: 600px) {
+    .col-md-6 {
+        flex: 1;
+    }
+}
+
